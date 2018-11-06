@@ -11,9 +11,9 @@ var startPoint = (function(e) {
    
   ctx.moveTo(Xpoint, Ypoint);
 });
- 
+
 var movePoint = (function(e) {
-  if(e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
+  if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     Xpoint = e.layerX;
     Ypoint = e.layerY;
     moveflg = 1;
@@ -22,42 +22,25 @@ var movePoint = (function(e) {
     ctx.lineCap = "round";
     ctx.lineWidth = defSize * 2;
     ctx.strokeStyle = defColor;
-    ctx.stroke();
-     
+    ctx.stroke();     
   }
 });
  
-var endPoint = (function(e) {
- 
-    if(moveflg === 0) {
-       ctx.lineTo(Xpoint-1, Ypoint-1);
-       ctx.lineCap = "round";
-       ctx.lineWidth = defSize * 2;
-       ctx.strokeStyle = defColor;
-       ctx.stroke();
-        
-    }
-    moveflg = 0;
+var endPoint = (function(e) { 
+  if (moveflg === 0) {
+     ctx.lineTo(Xpoint-1, Ypoint-1);
+     ctx.lineCap = "round";
+     ctx.lineWidth = defSize * 2;
+     ctx.strokeStyle = defColor;
+     ctx.stroke();
+      
+  }
+  moveflg = 0;
   setLocalStoreage();
-});
- 
-var clearCanvas = (function() {
-    if(confirm('Canvasを初期化しますか？'))
-    {
-        initLocalStorage();
-        temp = [];
-        resetCanvas();
-    }
 });
  
 var resetCanvas = (function() {
     ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
-});
- 
-var chgImg = (function() {
-  var png = canvas.toDataURL();
- 
-  document.getElementById("newImg").src = png;
 });
  
 var initLocalStorage = (function() {
@@ -68,8 +51,8 @@ var setLocalStoreage = (function() {
     var png = canvas.toDataURL();
     var logs = JSON.parse(myStorage.getItem("__log"));
  
-    setTimeout(function(){
-        logs.unshift({0:png});
+    setTimeout(function() {
+        logs.unshift({png});
  
         myStorage.setItem("__log", JSON.stringify(logs));
  
@@ -77,7 +60,55 @@ var setLocalStoreage = (function() {
         temp = [];
     }, 0);
 });
+
+var prevCanvas = (function() {
+    var logs = JSON.parse(myStorage.getItem("__log"));
  
+    if (logs.length > 0) {
+        temp.unshift(logs.shift());
+ 
+        setTimeout(function() {
+            myStorage.setItem("__log", JSON.stringify(logs));
+            resetCanvas();
+ 
+            draw(logs[0]['png']);
+ 
+        }, 0);
+    }
+});
+ 
+var nextCanvas = (function() {
+    var logs = JSON.parse(myStorage.getItem("__log"));
+ 
+    if (temp.length > 0) {
+        logs.unshift(temp.shift());
+ 
+        setTimeout(function() {
+            myStorage.setItem("__log", JSON.stringify(logs));
+            resetCanvas();
+ 
+            draw(logs[0]['png']);
+ 
+        }, 0);
+    }
+});
+
+var clearCanvas = (function() {
+    if (confirm('Canvasを初期化しますか？')) {
+        initLocalStorage();
+        temp = [];
+        resetCanvas();
+    }
+});
+ 
+var chgImg = (function() {
+  var png = canvas.toDataURL();
+ 
+  document.getElementById("newImg").src = png;
+});
+ 
+
+
 var draw = (function(src) {
     var img = new Image();
     img.src = src;
@@ -91,7 +122,9 @@ var canvas = document.getElementById('cs'),
     ctx = canvas.getContext('2d'),
     moveflg = 0,
     Xpoint,
-    Ypoint;
+    Ypoint,
+    currentCanvas,
+    temp = [];
  
 //初期値（サイズ、色、アルファ値）の決定
 var defSize = 1,

@@ -52,7 +52,7 @@ var setLocalStoreage = (function() {
     var logs = JSON.parse(myStorage.getItem("__log"));
  
     setTimeout(function() {
-        logs.unshift({png});
+        logs.unshift({ png: png });
  
         myStorage.setItem("__log", JSON.stringify(logs));
  

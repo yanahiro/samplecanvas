@@ -2,6 +2,17 @@
  * 電子署名関連
  */
 
+var saveflg = false;
+var mouseOver = (function(e) {
+  console.log('mouseOver');
+  if (saveflg) {
+    moveflg = 0;
+    setLocalStoreage();
+    e.preventDefault();
+    ctx.beginPath();
+  }
+});
+
 var startPoint = (function(e) {
   e.preventDefault();
   ctx.beginPath();
@@ -10,10 +21,13 @@ var startPoint = (function(e) {
   Ypoint = e.layerY;
    
   ctx.moveTo(Xpoint, Ypoint);
+  console.log('start');
+  saveflg = true;
 });
 
 var movePoint = (function(e) {
-  if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
+  if (e.buttons === 1 || e.which === 1 || e.type == 'touchmove') {
+    console.log('in');
     Xpoint = e.layerX;
     Ypoint = e.layerY;
     moveflg = 1;
@@ -23,6 +37,8 @@ var movePoint = (function(e) {
     ctx.lineWidth = defSize * 2;
     ctx.strokeStyle = defColor;
     ctx.stroke();     
+
+    saveflg = true;
   }
 });
  
@@ -33,29 +49,35 @@ var endPoint = (function(e) {
      ctx.lineWidth = defSize * 2;
      ctx.strokeStyle = defColor;
      ctx.stroke();
-      
+     console.log('endpoint1');      
+     saveflg = true;
   }
+  console.log('endpoint2');      
   moveflg = 0;
   setLocalStoreage();
+  saveflg = false;
 });
  
 var resetCanvas = (function() {
-    ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
+    ctx.clearRect(0, 0, ctx.canvas.clientWidth + 2, ctx.canvas.clientHeight + 2);
 });
  
 var initLocalStorage = (function() {
+  if (myStorage) {
     myStorage.setItem("__log", JSON.stringify([]));
+  }
 });
 
 var setLocalStoreage = (function() {
     var png = canvas.toDataURL();
     var logs = JSON.parse(myStorage.getItem("__log"));
- 
+
     setTimeout(function() {
+        // logs.unshift({png});
         logs.unshift({ png: png });
  
         myStorage.setItem("__log", JSON.stringify(logs));
- 
+
         currentCanvas = 0;
         temp = [];
     }, 0);
@@ -70,7 +92,7 @@ var prevCanvas = (function() {
         setTimeout(function() {
             myStorage.setItem("__log", JSON.stringify(logs));
             resetCanvas();
- 
+            console.log(logs[0]['png']);
             draw(logs[0]['png']);
  
         }, 0);
@@ -136,9 +158,11 @@ var myStorage = localStorage;
 window.onload = initLocalStorage();
  
 // PC対応
+canvas.addEventListener('mouseover', mouseOver, false);
 canvas.addEventListener('mousedown', startPoint, false);
 canvas.addEventListener('mousemove', movePoint, false);
 canvas.addEventListener('mouseup', endPoint, false);
+// canvas.addEventListener('mouseleave', endPoint, false);
 // スマホ対応
 canvas.addEventListener('touchstart', startPoint, false);
 canvas.addEventListener('touchmove', movePoint, false);

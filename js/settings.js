@@ -13,8 +13,7 @@ var getStyleSheetValue = (function(elem, prop) {
   return value;
 });
 
-// ロードイベント処理
-window.addEventListener('load', function() {
+var setCanvasSize = (function() {
   var csObj = document.querySelector('#cs');
   var width = getStyleSheetValue(csObj, 'width');
   var height = getStyleSheetValue(csObj, 'height');
@@ -24,4 +23,14 @@ window.addEventListener('load', function() {
   var elem = document.getElementById("cs");
   elem.setAttribute('width', width);
   elem.setAttribute('height', height);
+});
+
+// ロードイベント処理
+window.addEventListener('load', function() {
+  setCanvasSize();
 })
+
+// ウィンドウサイズが変わった場合
+window.addEventListener("resize", function() {
+  setCanvasSize();
+});

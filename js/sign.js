@@ -12,8 +12,14 @@ var isOnCanvas = false;
 // 保存可否判定フラグ
 var saveflg = false;
 
-// マウスオーバーイベント
-// （フォーカスイン）
+/**
+ * マウスオーバーイベント
+ * （フォーカスイン）
+ * canvas上にカーソルがある場合
+ * 
+ * @param  なし
+ * @return なし
+ */
 var mouseOver = (function(e) {
   console.log('mouseOver');
   // canvas上からフォーカスが外れて
@@ -31,16 +37,28 @@ var mouseOver = (function(e) {
   isOnCanvas = true;
 });
 
-// マウスリーブイベント
-// （フォーカスアウト）
+/**
+ * マウスリーブイベント
+ * （フォーカスアウト）
+ * canvas上からカーソルが外れた場合
+ * 
+ * @param  なし
+ * @return なし
+ */
 var mouseLeave = (function(e) {
   // IE,Edge制御用項目
   isOnCanvas = false;
   console.log('mouseLeave');
 });
 
-// マウスダウンイベント（マウスボタンを押したとき）
-// タッチスタートイベント
+/**
+ * マウスダウンイベント（マウスボタンを押したとき）
+ * タッチスタートイベント
+ * canvas上でマウスクリック、もしくはタッチした場合
+ * 
+ * @param  なし
+ * @return なし
+ */
 var startPoint = (function(e) {
   e.preventDefault();
   ctx.beginPath();
@@ -51,16 +69,24 @@ var startPoint = (function(e) {
   ctx.moveTo(Xpoint, Ypoint);
   console.log('start');
   saveflg = true;
+  isOnCanvas = true;
 });
 
-// マウスムーブイベント
-// タッチムーブイベント
+/**
+ * マウスムーブイベント
+ * タッチムーブイベント
+ * canvas上でマウスを移動、
+ * もしくはタッチしたまま移動した場合
+ * 
+ * @param  なし
+ * @return なし
+ */
 var movePoint = (function(e) {
 
   // IE,Edge制御用項目
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
-  if (e.type == 'mousemove' && !isOnCanvas) {
+  if (!isOnCanvas) {
     console.log('movePoint : false');
     return;
   }
@@ -80,9 +106,27 @@ var movePoint = (function(e) {
     saveflg = true;
   }
 });
+
+// var movePointForPC = (function(e) {
+//   // IE,Edge制御用項目
+//   // mouseoverよりmousemoveが先に発火するため
+//   // mouseoverイベント前は処理しない
+//   if (e.type == 'mousemove' && !isOnCanvas) {
+//     console.log('movePoint : false');
+//     return;
+//   }
+//   movePoint(e);
+// });
  
-// マウスアップイベント（マウスボタンを離したとき）
-// タッチエンドイベント
+/**
+ * マウスアップイベント（マウスボタンを離したとき）
+ * タッチエンドイベント
+ * canvas上でマウスのクリックを離す、
+ * もしくはタッチを終了した場合
+ * 
+ * @param  なし
+ * @return なし
+ */
 var endPoint = (function(e) { 
   if (moveflg === 0) {
      ctx.lineTo(Xpoint-1, Ypoint-1);

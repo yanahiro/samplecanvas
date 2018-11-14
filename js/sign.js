@@ -26,7 +26,7 @@ var startPoint = (function(e) {
 });
 
 var movePoint = (function(e) {
-  if (e.buttons === 1 || e.which === 1 || e.type == 'touchmove') {
+  if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     console.log('in');
     Xpoint = e.layerX;
     Ypoint = e.layerY;
@@ -149,8 +149,8 @@ var canvas = document.getElementById('cs'),
     temp = [];
  
 //初期値（サイズ、色、アルファ値）の決定
-var defSize = 1,
-    defColor = "#555";
+var defSize = 1;
+var defColor = "#555";
  
  
 // ストレージの初期化

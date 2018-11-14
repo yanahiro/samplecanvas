@@ -60,7 +60,7 @@ var movePoint = (function(e) {
   // IE,Edge制御用項目
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
-  if (e.type == 'mousemove' || !isOnCanvas) {
+  if (e.type == 'mousemove' && !isOnCanvas) {
     console.log('movePoint : false');
     return;
   }

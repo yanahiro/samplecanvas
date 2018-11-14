@@ -10,6 +10,7 @@ var mouseOver = (function(e) {
     setLocalStoreage();
     e.preventDefault();
     ctx.beginPath();
+    saveflg = false;
     console.log('mouseOver:save');
   }
 });

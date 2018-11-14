@@ -36,10 +36,11 @@ var startPoint = (function(e) {
 });
 
 var movePoint = (function(e) {
-  if (isOnCanvas) {
-    return false;
+  if (!isOnCanvas) {
+    console.log('movePoint : false');
+    return;
   }
-  
+
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     console.log('in');
     Xpoint = e.layerX;

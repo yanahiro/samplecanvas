@@ -2,6 +2,7 @@
  * 電子署名関連
  */
 
+var isOnCanvas = false;
 var saveflg = false;
 var mouseOver = (function(e) {
   console.log('mouseOver');
@@ -13,6 +14,13 @@ var mouseOver = (function(e) {
     saveflg = false;
     console.log('mouseOver:save');
   }
+  isOnCanvas = true;
+});
+
+
+var mouseLeave = (function(e) {
+  isOnCanvas = false;
+  console.log('mouseLeave');
 });
 
 var startPoint = (function(e) {
@@ -28,6 +36,10 @@ var startPoint = (function(e) {
 });
 
 var movePoint = (function(e) {
+  if (isOnCanvas) {
+    return false;
+  }
+  
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     console.log('in');
     Xpoint = e.layerX;
@@ -164,7 +176,7 @@ canvas.addEventListener('mouseover', mouseOver, false);
 canvas.addEventListener('mousedown', startPoint, false);
 canvas.addEventListener('mousemove', movePoint, false);
 canvas.addEventListener('mouseup', endPoint, false);
-// canvas.addEventListener('mouseleave', endPoint, false);
+canvas.addEventListener('mouseleave', mouseLeave, false);
 // スマホ対応
 canvas.addEventListener('touchstart', startPoint, false);
 canvas.addEventListener('touchmove', movePoint, false);

@@ -1,11 +1,24 @@
 /**
- * 電子署名関連
+ * canvas操作
+ * canvasに文字を書くための処理
+ * IE,EdgeとChromeはイベントの発生順序が異なるため
+ * 発生順序を意識しする
  */
 
+// ポインタがcanvas上に存在するかを管理するフラグ
+// canvas判定フラグ
 var isOnCanvas = false;
+
+// 保存可否判定フラグ
 var saveflg = false;
+
+// マウスオーバーイベント
+// （フォーカスイン）
 var mouseOver = (function(e) {
   console.log('mouseOver');
+  // canvas上からフォーカスが外れて
+  // 戻ってきた場合に直前までの
+  // 内容を保存する
   if (saveflg) {
     moveflg = 0;
     setLocalStoreage();
@@ -14,15 +27,20 @@ var mouseOver = (function(e) {
     saveflg = false;
     console.log('mouseOver:save');
   }
+  // IE,Edge制御用項目
   isOnCanvas = true;
 });
 
-
+// マウスリーブイベント
+// （フォーカスアウト）
 var mouseLeave = (function(e) {
+  // IE,Edge制御用項目
   isOnCanvas = false;
   console.log('mouseLeave');
 });
 
+// マウスダウンイベント（マウスボタンを押したとき）
+// タッチスタートイベント
 var startPoint = (function(e) {
   e.preventDefault();
   ctx.beginPath();
@@ -35,8 +53,14 @@ var startPoint = (function(e) {
   saveflg = true;
 });
 
+// マウスムーブイベント
+// タッチムーブイベント
 var movePoint = (function(e) {
-  if (!isOnCanvas) {
+
+  // IE,Edge制御用項目
+  // mouseoverよりmousemoveが先に発火するため
+  // mouseoverイベント前は処理しない
+  if (e.type == 'mousemove' || !isOnCanvas) {
     console.log('movePoint : false');
     return;
   }
@@ -57,6 +81,8 @@ var movePoint = (function(e) {
   }
 });
  
+// マウスアップイベント（マウスボタンを離したとき）
+// タッチエンドイベント
 var endPoint = (function(e) { 
   if (moveflg === 0) {
      ctx.lineTo(Xpoint-1, Ypoint-1);
@@ -72,17 +98,39 @@ var endPoint = (function(e) {
   setLocalStoreage();
   saveflg = false;
 });
- 
+
+/**
+ * リセット処理
+ * canvas上に描画した内容をクリアする
+ * 
+ * @param  なし
+ * @return なし
+ */
 var resetCanvas = (function() {
-    ctx.clearRect(0, 0, ctx.canvas.clientWidth + 2, ctx.canvas.clientHeight + 2);
+  // border分の幅と高さを足す(2px)
+  ctx.clearRect(0, 0, ctx.canvas.clientWidth + 2, ctx.canvas.clientHeight + 2);
 });
  
+/**
+ * ストレージ初期化処理
+ * localstorageを初期化する
+ * 
+ * @param  なし
+ * @return なし
+ */
 var initLocalStorage = (function() {
   if (myStorage) {
     myStorage.setItem("__log", JSON.stringify([]));
   }
 });
 
+/**
+ * ストレージ保存処理
+ * 描画した内容をlocalStorageに保存する
+ * 
+ * @param  なし
+ * @return なし
+ */
 var setLocalStoreage = (function() {
     var png = canvas.toDataURL();
     var logs = JSON.parse(myStorage.getItem("__log"));
@@ -98,6 +146,13 @@ var setLocalStoreage = (function() {
     }, 0);
 });
 
+/**
+ * 戻る処理
+ * １つ前の描画内容に戻す
+ * 
+ * @param  なし
+ * @return なし
+ */
 var prevCanvas = (function() {
     var logs = JSON.parse(myStorage.getItem("__log"));
  
@@ -114,6 +169,13 @@ var prevCanvas = (function() {
     }
 });
  
+/**
+ * 進む処理
+ * １つ先の描画内容に戻す
+ * 
+ * @param  なし
+ * @return なし
+ */
 var nextCanvas = (function() {
     var logs = JSON.parse(myStorage.getItem("__log"));
  
@@ -130,6 +192,14 @@ var nextCanvas = (function() {
     }
 });
 
+
+/**
+ * リセット処理
+ * 確認後、localStorageとcanvasを初期化する
+ * 
+ * @param  なし
+ * @return なし
+ */
 var clearCanvas = (function() {
     if (confirm('Canvasを初期化しますか？')) {
         initLocalStorage();
@@ -138,14 +208,26 @@ var clearCanvas = (function() {
     }
 });
  
+/**
+ * 画像変換処理
+ * canvas上に記載した内容を画像変換する
+ * 
+ * @param  なし
+ * @return なし
+ */
 var chgImg = (function() {
   var png = canvas.toDataURL();
  
   document.getElementById("newImg").src = png;
 });
  
-
-
+/**
+ * 描画処理
+ * canvas上にイメージを描画する
+ * 
+ * @param  なし
+ * @return なし
+ */
 var draw = (function(src) {
     var img = new Image();
     img.src = src;
@@ -154,6 +236,13 @@ var draw = (function(src) {
         ctx.drawImage(img, 0, 0);
     }
 });
+
+
+/** ---------------------------
+ * 
+ * 主処理
+ * 
+ * -------------------------- */
 
 var canvas = document.getElementById('cs'),
     ctx = canvas.getContext('2d'),
@@ -182,3 +271,4 @@ canvas.addEventListener('mouseleave', mouseLeave, false);
 canvas.addEventListener('touchstart', startPoint, false);
 canvas.addEventListener('touchmove', movePoint, false);
 canvas.addEventListener('touchend', endPoint, false);
+

@@ -82,13 +82,13 @@ var startPoint = (function(e) {
  * @return なし
  */
 var movePoint = (function(e) {
-  alert('move start');
   // タッチによる画面スクロールを止める
   e.preventDefault();
   // IE,Edge制御用項目
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
   if (!isOnCanvas) {
+    alert('isOnCanvas : ' + isOnCanvas);
     console.log('movePoint : false');
     return;
   }

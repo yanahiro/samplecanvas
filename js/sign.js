@@ -93,6 +93,7 @@ var movePoint = (function(e) {
     return;
   }
 
+  alert('e : ' (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove'));
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     console.log('in');
     Xpoint = e.layerX;

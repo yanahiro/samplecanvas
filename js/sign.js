@@ -88,13 +88,13 @@ var movePoint = (function(e) {
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
   if (!isOnCanvas) {
-    alert('isOnCanvas : ' + String(isOnCanvas));
+    alert('isOnCanvas : true');
     console.log('movePoint : false');
     return;
   }
 
-  alert('e : ' String(e.buttons === 1 || e.witch === 1 || e.type == 'touchmove'));
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
+    alert('touch OK!!');
     console.log('in');
     Xpoint = e.layerX;
     Ypoint = e.layerY;
@@ -107,6 +107,8 @@ var movePoint = (function(e) {
     ctx.stroke();     
 
     saveflg = true;
+  } else {
+    alert('touch NG!!');
   }
 });
 

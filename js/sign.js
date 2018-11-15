@@ -60,6 +60,8 @@ var mouseLeave = (function(e) {
  * @return なし
  */
 var startPoint = (function(e) {
+  alert('touch start');
+  e.preventDefault();
   ctx.beginPath();
  
   Xpoint = e.layerX;
@@ -81,6 +83,7 @@ var startPoint = (function(e) {
  * @return なし
  */
 var movePoint = (function(e) {
+  alert('move start');
   // タッチによる画面スクロールを止める
   e.preventDefault();
   // IE,Edge制御用項目

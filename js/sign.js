@@ -88,13 +88,13 @@ var movePoint = (function(e) {
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
   if (!isOnCanvas) {
-    alert('isOnCanvas : true');
+    // alert('isOnCanvas : true');
     console.log('movePoint : false');
     return;
   }
 
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
-    alert('touch OK!!');
+    // alert('touch OK!!');
     console.log('in');
     Xpoint = e.layerX;
     Ypoint = e.layerY;
@@ -131,7 +131,9 @@ var movePoint = (function(e) {
  * @return なし
  */
 var endPoint = (function(e) { 
+  alert('touch end 001');
   if (moveflg === 0) {
+    alert('touch end 002');
      ctx.lineTo(Xpoint-1, Ypoint-1);
      ctx.lineCap = "round";
      ctx.lineWidth = defSize * 2;
@@ -142,7 +144,9 @@ var endPoint = (function(e) {
   }
   console.log('endpoint2');      
   moveflg = 0;
+  alert('touch end 003');
   setLocalStoreage();
+  alert('touch end 004');
   saveflg = false;
 });
 
@@ -184,10 +188,11 @@ var setLocalStoreage = (function() {
 
     setTimeout(function() {
         // logs.unshift({png});
+        alert('sls 001');
         logs.unshift({ png: png });
- 
+        alert('sls 002');
         myStorage.setItem("__log", JSON.stringify(logs));
-
+        alert('sls 003');
         currentCanvas = 0;
         temp = [];
     }, 0);

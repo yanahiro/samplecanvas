@@ -60,7 +60,6 @@ var mouseLeave = (function(e) {
  * @return なし
  */
 var startPoint = (function(e) {
-  alert('touch start');
   e.preventDefault();
   ctx.beginPath();
  

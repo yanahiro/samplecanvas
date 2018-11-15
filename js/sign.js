@@ -88,12 +88,12 @@ var movePoint = (function(e) {
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
   if (!isOnCanvas) {
-    alert('isOnCanvas : ' + isOnCanvas);
+    alert('isOnCanvas : ' + String(isOnCanvas));
     console.log('movePoint : false');
     return;
   }
 
-  alert('e : ' (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove'));
+  alert('e : ' String(e.buttons === 1 || e.witch === 1 || e.type == 'touchmove'));
   if (e.buttons === 1 || e.witch === 1 || e.type == 'touchmove') {
     console.log('in');
     Xpoint = e.layerX;

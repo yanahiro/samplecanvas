@@ -60,7 +60,7 @@ var mouseLeave = (function(e) {
  * @return なし
  */
 var startPoint = (function(e) {
-  e.preventDefault();
+  // e.preventDefault();
   ctx.beginPath();
  
   Xpoint = e.layerX;
@@ -107,8 +107,6 @@ var movePoint = (function(e) {
     ctx.stroke();     
 
     saveflg = true;
-  } else {
-    alert('touch NG!!');
   }
 });
 

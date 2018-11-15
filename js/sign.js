@@ -28,7 +28,7 @@ var mouseOver = (function(e) {
   if (saveflg) {
     moveflg = 0;
     setLocalStoreage();
-    e.preventDefault();
+    // e.preventDefault();
     ctx.beginPath();
     saveflg = false;
     console.log('mouseOver:save');
@@ -60,7 +60,6 @@ var mouseLeave = (function(e) {
  * @return なし
  */
 var startPoint = (function(e) {
-  e.preventDefault();
   ctx.beginPath();
  
   Xpoint = e.layerX;
@@ -82,7 +81,8 @@ var startPoint = (function(e) {
  * @return なし
  */
 var movePoint = (function(e) {
-
+  // タッチによる画面スクロールを止める
+  e.preventDefault();
   // IE,Edge制御用項目
   // mouseoverよりmousemoveが先に発火するため
   // mouseoverイベント前は処理しない
